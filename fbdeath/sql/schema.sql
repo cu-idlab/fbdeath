@@ -2,15 +2,15 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci ;
-USE `mydb` ;
+CREATE SCHEMA IF NOT EXISTS `fbdeath` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci ;
+USE `fbdeath` ;
 
 -- -----------------------------------------------------
--- Table `mydb`.`user`
+-- Table `fbdeath`.`user`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`user` ;
+DROP TABLE IF EXISTS `fbdeath`.`user` ;
 
-CREATE  TABLE IF NOT EXISTS `mydb`.`user` (
+CREATE  TABLE IF NOT EXISTS `fbdeath`.`user` (
   `id` INT NOT NULL ,
   `fb_user_id` INT NULL ,
   `fb_token` VARCHAR(256) NULL ,
@@ -22,11 +22,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`profile`
+-- Table `fbdeath`.`profile`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`profile` ;
+DROP TABLE IF EXISTS `fbdeath`.`profile` ;
 
-CREATE  TABLE IF NOT EXISTS `mydb`.`profile` (
+CREATE  TABLE IF NOT EXISTS `fbdeath`.`profile` (
   `id` INT NOT NULL ,
   `user_id` VARCHAR(45) NULL ,
   `attr_name` VARCHAR(45) NULL ,
@@ -37,11 +37,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`delegation`
+-- Table `fbdeath`.`delegation`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`delegation` ;
+DROP TABLE IF EXISTS `fbdeath`.`delegation` ;
 
-CREATE  TABLE IF NOT EXISTS `mydb`.`delegation` (
+CREATE  TABLE IF NOT EXISTS `fbdeath`.`delegation` (
   `id` INT NOT NULL ,
   `provider_user_id` INT NULL ,
   `recipient_user_id` INT NULL ,
@@ -50,11 +50,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`fb_user`
+-- Table `fbdeath`.`fb_user`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`fb_user` ;
+DROP TABLE IF EXISTS `fbdeath`.`fb_user` ;
 
-CREATE  TABLE IF NOT EXISTS `mydb`.`fb_user` (
+CREATE  TABLE IF NOT EXISTS `fbdeath`.`fb_user` (
   `id` INT NOT NULL ,
   `fb_id` VARCHAR(45) NULL ,
   PRIMARY KEY (`id`) )
@@ -62,11 +62,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`relationship`
+-- Table `fbdeath`.`relationship`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`relationship` ;
+DROP TABLE IF EXISTS `fbdeath`.`relationship` ;
 
-CREATE  TABLE IF NOT EXISTS `mydb`.`relationship` (
+CREATE  TABLE IF NOT EXISTS `fbdeath`.`relationship` (
   `id` INT NOT NULL ,
   `fb_user_id1` INT NULL ,
   `fb_user_id2` INT NULL ,

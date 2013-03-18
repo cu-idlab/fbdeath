@@ -11,7 +11,15 @@
     "require": {
         "php": ">=5.3.3",
         "zendframework/zendframework": "2.*",
-        "socalnick/scn-social-auth": "dev-master",
-        "zendframework/zftool": "dev-master"        
-    }
+        "zf-commons/zfc-user": "dev-master",
+        "zendframework/zftool": "dev-master",
+        "zf-commons/zfc-admin": "dev-master",
+        "hybridauth/hybridauth": "dev-master",
+        "facebook/php-sdk": "dev-master"                
+    },
+    "old-requirements-ignored-because-it-conflicts": {
+		"socalnick/scn-social-auth": "dev-master",
+		"esheepsoft/zf-facebook-api": "dev-master"
+	}
 }
+

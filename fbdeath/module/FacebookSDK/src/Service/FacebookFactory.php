@@ -1,6 +1,6 @@
 <?php
 
-namespace Zf2mFacebook\Service;
+namespace FacebookSDK\Service;
 
 use InvalidArgumentException;
 use Zend\ServiceManager\FactoryInterface;

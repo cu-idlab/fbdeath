@@ -1,6 +1,6 @@
 <?php
 
-namespace Zf2mFacebook;
+namespace FacebookSDK;
 
 use Zend\ModuleManager\ModuleManager;
 use Zend\EventManager\StaticEventManager;
@@ -25,7 +25,7 @@ class Module implements ServiceProviderInterface
     	return array(
     		'aliases' => array(),
     		'factories' => array(
-    			'FacebookService'  => 'Zf2mFacebook\Service\FacebookFactory',
+    			'FacebookService'  => 'FacebookSDK\Service\FacebookFactory',
     		),
     	);
     }

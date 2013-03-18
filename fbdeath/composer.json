@@ -1,6 +1,6 @@
 {
-    "name": "zendframework/skeleton-application",
-    "description": "Skeleton Application for ZF2",
+    "name": "star-uci/fbdeath-epilogue",
+    "description": "Epilogue",
     "license": "BSD-3-Clause",
     "keywords": [
         "framework",
@@ -11,11 +11,12 @@
     "require": {
         "php": ">=5.3.3",
         "zendframework/zendframework": "2.*",
-        "zf-commons/zfc-user": "dev-master",
+        "zf-commons/zfc-user": "0.1.1",
         "zendframework/zftool": "dev-master",
         "zf-commons/zfc-admin": "dev-master",
         "hybridauth/hybridauth": "dev-master",
-        "facebook/php-sdk": "dev-master"                
+        "facebook/php-sdk": "dev-master",
+        "socalnick/scn-social-auth": "dev-master"              
     },
     "old-requirements-ignored-because-it-conflicts": {
 		"socalnick/scn-social-auth": "dev-master",

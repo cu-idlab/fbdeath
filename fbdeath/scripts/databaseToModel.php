@@ -1,88 +1,121 @@
 <?php
 
 ini_set('auto_detect_line_endings', TRUE);
+ini_set('include_path', ini_get('include_path')."/Users/whatknows/Zend/workspaces/DefaultWorkspace/fbdeath/vendor/zendframework/zendframework/library");
 
-require_once('Zend/Db/Table/Abstract.php');
-require_once('Zend/CodeGenerator/Php/Class.php');
-require_once('Zend/CodeGenerator/Php/Docblock.php');
-require_once('Zend/CodeGenerator/Php/Parameter.php');
-require_once('Zend/CodeGenerator/Php/Parameter/DefaultValue.php');
-require_once('Zend/CodeGenerator/Php/Property.php');
+
+require_once 'Zend/Loader/ClassMapAutoloader.php';
+require_once 'Zend/Loader/StandardAutoloader.php';
+$autoLoader = new Zend\Loader\StandardAutoloader(array(
+		'prefixes' => array(
+				'MyVendor' => __DIR__ . '/MyVendor',
+		),
+		'namespaces' => array(
+				'MyNamespace' => __DIR__ . '/MyNamespace',
+		),
+		'fallback_autoloader' => true,
+));
+$autoLoader->register();
+
+// register our StandardAutoloader with the SPL autoloader
+
+$autoLoader->register();
+require_once 'Zend/Db/Adapter/AdapterInterface.php';
+require_once 'Zend/Db/Adapter/Profiler/ProfilerAwareInterface.php';
+require_once 'Zend/Db/Adapter/Adapter.php';
+
+
+// require_once('Zend/Db/Table/Abstract.php');
+// require_once('Zend/CodeGenerator/Php/Class.php');
+// require_once('Zend/CodeGenerator/Php/Docblock.php');
+// require_once('Zend/CodeGenerator/Php/Parameter.php');
+// require_once('Zend/CodeGenerator/Php/Parameter/DefaultValue.php');
+// require_once('Zend/CodeGenerator/Php/Property.php');
 //require_once('PHPUnit/Framework/TestSuite.php');
 
 // VARIABLES
-$path		= array(	'base'		=> 	'../application/',
+$path		= array(	'base'		=> 	'../module/Database/src/Database/Model/',
 						'mapper'	=>	'Mapper/',
 						'model'		=>	'Model/',
-						'dbTable'	=>	'DbTable/'	);
+						'dbTable'	=>	'Model/'	);
 $package	= array(	'base'		=> 	'Persist_MySpace',
 						'mapper'	=>	'Mapper',
 						'model'		=>	'Model',
-						'dbTable'	=>	'DbTable'	);
-
+						'dbTable'	=>	'Model'	);
 
 // DB CONNECTION
-$db = 	Zend_Db::factory(
-			'PDO_MYSQL', 
-			array(	'host'     => '127.0.0.1',
-			    	'username' => 'root',
-			    	'password' => '',
-			    	'dbname'   => 'fbdeath')
-		);
+$dbParams = array(
+		'database'  => 'fbdeath',
+		'username'  => 'root',
+		'password'  => '',
+		'hostname'  => '127.0.0.1',
+);
+$db = new Zend\Db\Adapter\Adapter(array(
+	               'driver'    => 'pdo',
+                    'dsn'       => 'mysql:dbname='.$dbParams['database'].';host='.$dbParams['hostname'],
+                    'database'  => $dbParams['database'],
+                    'username'  => $dbParams['username'],
+                    'password'  => $dbParams['password'],
+                    'hostname'  => $dbParams['hostname'],
+));
 
-Zend_Db_Table_Abstract::setDefaultAdapter($db);
 
+// Get all the tables in the database
+$tableArray = array();
+$statement = $db->query("SHOW TABLES");
+$results = $statement->execute();
+foreach($results as $result) {
+    $tableArray[] = array_pop($result);
+}
 
-// get all tables in db
-$tables = $db->listTables();
-foreach($tables as $table) {
+foreach($tableArray as $table) {
 	
 	// need to remove underline first, ucwords, and then remove space
 	$name = str_replace(' ', '', ucwords(str_replace('_', ' ', $table)));
 	
-	$generator = new ModelGenerator($table, 
+	$generator = new ModelGenerator($db, 
+	        						$table, 
 									$name, 
 									$package['base'],  
 									$package['model'],
 									$package['dbTable'],
 									$package['mapper']	);
-	
+
 	/**
 	 * CREATE MODEL FILE
 	 */
 	$code = $generator->model();
 	
 	// Output code to file
-	if (!is_dir($path['base'] . $path['model']))
-		mkdir($path['base'] . $path['model'], 0777, true);
-	$file = $path['base'] . $path['model']. $name . '.php';
+	if (!is_dir($path['base']))
+		mkdir($path['base'], 0777, true);
+	$file = $path['base'] .  $name . '.php';
 	echo $file."\n";
 	file_put_contents($file, '<?php' . PHP_EOL . $code);
-	
 	
 	/**
 	 * CREATE DBTABLE FILE
 	 */	
 	$dbCode = $generator->dbTable();
-	
+
 	//echo $db_class->generate() . PHP_EOL;
-	if(!is_dir($path['base'] . $path['dbTable']))
-		mkdir($path['base'] . $path['dbTable'], 0777, true);
-	$file = $path['base'] . $path['dbTable']. $name . '.php';
+	if(!is_dir($path['base']))
+		mkdir($path['base'], 0777, true);
+	$file = $path['base'] . $name . 'Table.php';
 	echo $file."\n";
 	file_put_contents($file, '<?php' . PHP_EOL . $dbCode);
 	
 	/**
 	 * CREATE MAPPER FILE
 	 */	
-	$code = $generator->mapper();
+// 	$code = $generator->mapper();
 	
-	//echo $db_class->generate() . PHP_EOL;
-	if(!is_dir($path['base'] . $path['mapper']))
-		mkdir($path['base'] . $path['mapper'], 0777, true);
-	$file = $path['base'] . $path['mapper']. $name . '.php';
-	echo $file."\n";
-	file_put_contents($file, '<?php' . PHP_EOL . $code);
+// 	//echo $db_class->generate() . PHP_EOL;
+// 	if(!is_dir($path['base'] . $path['mapper']))
+// 		mkdir($path['base'] . $path['mapper'], 0777, true);
+// 	$file = $path['base'] . $path['mapper']. $name . '.php';
+// 	echo $file."\n";
+// 	file_put_contents($file, '<?php' . PHP_EOL . $code);
 	
 }
 
@@ -105,7 +138,9 @@ class ModelGenerator {
 	protected $primary;
 	protected $columns;
 	
-	function __construct($tableName, $className, $package = null, $model = null, $dbTable = null, $mapper = null) {
+	protected $db;
+	
+	function __construct(Zend\Db\Adapter\Adapter $db, $tableName, $className, $package = null, $model = null, $dbTable = null, $mapper = null) {
 
 		
 		if (!$tableName)
@@ -119,7 +154,9 @@ class ModelGenerator {
 		$this->package 		= $package;
 		$this->model 		= $model;
 		$this->mapper 		= $mapper;
-		$this->dbTable 		= $dbTable;		
+		$this->dbTable 		= $dbTable;	
+
+		$this->db			= $db;
 		
 		// get all fields		
 		$this->parseFields();
@@ -134,8 +171,11 @@ class ModelGenerator {
 	 */
 	private function parseFields() {
 
+	    $meta = new Zend\Db\Metadata\Metadata($this->db);
+	    $table = $meta->getTable($this->tableName);
+	    
 		// Get all fields
-		$fields = $this->getDb()->describeTable($this->tableName);		
+		$fields = $table->getColumns();
 		// want to track primary ids for table
 		$primary = array();		
 		// add to columns each field with a default value
@@ -143,15 +183,15 @@ class ModelGenerator {
 		foreach($fields as $field) {
 				
 			// if int field default to 0
-			$columns[$field['COLUMN_NAME']] = strpos($field['DATA_TYPE'], 'int') !== false ? 0 : '';
+			$columns[$field->getName()] = strpos($field->getDataType(), 'int') !== false ? 0 : '';
 	
 			// track primary field(s) for table
-			if($field['PRIMARY']) {
-				$primary[] = $field['COLUMN_NAME'];
-			}
+// 			if($field->getConstraint()->isPrimaryKey()) {
+// 				$primary[] = $field['COLUMN_NAME'];
+// 			}
 		}
 		
-		$this->primary = $primary;
+// 		$this->primary = $primary;
 		$this->columns = $columns;
 	}
 
@@ -160,7 +200,7 @@ class ModelGenerator {
 	 * Build the DocBlock for the top of the class file.
 	 */
 	private function buildDocBlock($description) {
-		$docblock = new Zend_CodeGenerator_Php_Docblock(
+		$docblock = new Zend\Code\Generator\DocBlockGenerator(
 			array('shortDescription' => $description,
 				'tags' => array(
 					array(	'name' 			=> 'author',
@@ -187,11 +227,10 @@ class ModelGenerator {
 	}
 
 	private function getDb() {
-		$db = Zend_Db_Table_Abstract::getDefaultAdapter();
-		if (!$db)
+		if (!$this->db)
 			throw new Exception("ModelGenerator: Unable to get database connection. Aborting.");
 		
-		return $db;
+		return $this->db;
 	}
 	
 	public function model() {
@@ -203,50 +242,98 @@ class ModelGenerator {
 			throw new Exception("ModelGenerator: model not set. Aborting.");
 	
 		// create new class generator
-		$class = new Zend_CodeGenerator_Php_Class();
+		$class = new Zend\Code\Generator\ClassGenerator();
 	
 		// build docblock
 		$docBlock = $this->buildDocBlock($this->className . ' model');
 		
 		// set name and docblock
-		$class->setName($this->package. "_" . $this->model . "_" . $this->className);
-		$class->setExtendedClass("Persist_Model");
+		$class->setNamespaceName("Database\Model");
+
+		$class->addUse("Zend\InputFilter\Factory", "InputFactory");
+		$class->addUse("Zend\InputFilter\InputFilter");
+		$class->addUse("Zend\InputFilter\InputFilterAwareInterface");
+		$class->addUse("Zend\InputFilter\InputFilterInterface");
+
+		
+		$class->setName($this->className);
+// 		$class->setExtendedClass("Persist_Model");
+		$class->setImplementedInterfaces(array("InputFilterAwareInterface"));        
 		$class->setDocblock($docBlock);
 		
 		// Build constructor
-		$class->setMethod(		array(	'name'			=> "__construct",
-										'parameters'	=> array(array('name' => 'options', 'type' => 'array', 'defaultValue' => new Zend_CodeGenerator_Php_Parameter_DefaultValue('null'))),
-										'body'			=> 	'parent::__construct();'."\n".
-															'if (is_array($options)) {'."\n".
-															'	$this->setOptions($options);'."\n".
-        													'}'));
+// 		$class->addMethod(	"__construct", 
+// 		        			array(	'name'			=> "__construct",
+// 									'parameters'	=> array(	'name' => 'options', 
+// 										        					'type' => 'array', 
+// 										        					'defaultValue' => null),
+// 									'body'			=> 	'parent::__construct();'."\n".
+// 														'if (is_array($options)) {'."\n".
+// 														'	$this->setOptions($options);'."\n".
+//         												'}'));
 		
 		// add data array property to class
+		$exchangeArrayBody .= "";
 		foreach ($this->columns as $key => $defaultValue) {
 			
-			$class->setProperty(	array(	'name'			=> $this->convertToBumpyCaps($key),
-											'visibility' 	=> 'protected'/*,
-											'defaultValue'	=> $defaultValue*/	));
+			$class->addProperty(	$this->convertToBumpyCaps($key) /* name */, 
+			        				$defaultValue, 
+			        				Zend\Code\Generator\PropertyGenerator::FLAG_PROTECTED);
+
+			$class->addMethod(		"set".ucfirst($this->convertToBumpyCaps($key)),
+									array(	'parameters'	=> 'value'),
+			        				null,
+			        				'$this->'.$this->convertToBumpyCaps($key).' = $value;'."\n".'return $this;');
 			
-			$class->setMethod(		array(	'name'			=> "set".ucfirst($this->convertToBumpyCaps($key)),
-											'parameters'	=> array(array('name' => 'value')),
-											'body'			=> '$this->'.$this->convertToBumpyCaps($key).' = $value;'."\n".'return $this;'));
-			
-			$class->setMethod(		array(	'name'			=> "get".ucfirst($this->convertToBumpyCaps($key)),
-											'body'			=> 'return $this->'.$this->convertToBumpyCaps($key).';'));			
+			$class->addMethod(		"get".ucfirst($this->convertToBumpyCaps($key)),
+									array(),
+			        				null,
+			        				'return $this->'.$this->convertToBumpyCaps($key).';');	
+
+			$exchangeArrayBody .=	'$this->'.$this->convertToBumpyCaps($key).' = (isset($data[\''.$this->convertToBumpyCaps($key).'\'])) ? $data[\''.$this->convertToBumpyCaps($key).'\'] : null;'."\n";
 		}
 		
+		// Build utility functions
+		
+		// exchangeArray
+		$class->addMethod(	"exhcangeArray",
+		        			array(	'parameters'	=> 'data'),
+		        			null,
+		        			$exchangeArrayBody);
+// 		public function exchangeArray ($data)
+// 		{
+// 			$this->id = (isset($data['id'])) ? $data['id'] : null;
+// 			$this->artist = (isset($data['artist'])) ? $data['artist'] : null;
+// 			$this->title = (isset($data['title'])) ? $data['title'] : null;
+// 		}
+		
+		// getArrayCopy
+		$class->addMethod(	"getArrayCopy",
+		        			array(),
+		        			null,
+		        			'return get_object_vars($this);');
+		        			
+
+		// setInputFiler
+		$class->addMethod(	"setInputFilter",
+		        			array(	new Zend\Code\Generator\ParameterGenerator(	"inputFilter", 
+		        			        											"InputFilterInterace")), 
+		        			null, 
+		        			'throw new \Exception("Not used");');
+		
+		
+		
 		// Build options method
-		$class->setMethod(		array(	'name'			=> "setOptions",
-										'parameters'	=> array(array('name' => 'options', 'type' => 'array')),
-										'body'			=> 	'$methods = get_class_methods($this);'."\n".
-													        'foreach ($options as $key => $value) {'."\n".
-													        '	$method = \'set\' . ucfirst($key);'."\n".
-													        '	if (in_array($method, $methods)) {'."\n".
-													        '		$this->$method($value);'."\n".
-													        '	}'."\n".
-													        '}'."\n".
-													        'return $this;'));
+// 		$class->setMethod(		array(	'name'			=> "setOptions",
+// 										'parameters'	=> array(array('name' => 'options', 'type' => 'array')),
+// 										'body'			=> 	'$methods = get_class_methods($this);'."\n".
+// 													        'foreach ($options as $key => $value) {'."\n".
+// 													        '	$method = \'set\' . ucfirst($key);'."\n".
+// 													        '	if (in_array($method, $methods)) {'."\n".
+// 													        '		$this->$method($value);'."\n".
+// 													        '	}'."\n".
+// 													        '}'."\n".
+// 													        'return $this;'));
 
 		
 		// Build toArray method
@@ -256,8 +343,10 @@ class ModelGenerator {
 		}		
 		$toArrayBody .= 'return $data;';
 		
-		$class->setMethod(		array(	'name'			=> "toArray",
-										'body'			=> 	$toArrayBody));
+		$class->addMethod(		"toArray",
+		        				array(),
+		        				null,
+		        				$toArrayBody);
 									
 		return $class->generate();
 		
@@ -267,54 +356,147 @@ class ModelGenerator {
 		/** 
 		 * CREATE DBTABLE
 		 */
-		
+		    
 		if(!$this->dbTable)
 			throw new Exception("ModelGenerator: dbTable not set. Aborting.");
-		
-		// create zend_db_table_abstract
-		$db_class = new Zend_CodeGenerator_Php_Class();
-		$db_class->setName($this->package ."_". $this->dbTable ."_". $this->className);
-		$db_class->setExtendedClass('Zend_Db_Table_Abstract');
+	
+		// create class
+		$db_class = new Zend\Code\Generator\ClassGenerator();
+		$db_class->setNamespaceName("Database\Model");
+		$db_class->addUse("Zend\Db\TableGateway\TableGateway");
+		$db_class->setName($this->className."Table");
 		
 		// build docblock
 		$docBlock = $this->buildDocBlock($this->className . ' DbTable');
 		// set docblock
 		$db_class->setDocblock($docBlock);
 		
-		$db_class->setProperty(
-			array(	'name' 			=> '_name',
-					'visibility' 	=> 'protected',
-					'defaultValue' 	=> $this->tableName,
-					'docblock' 		=> 
-						array(	'tags' 	=> 
-							array(	
-								new Zend_CodeGenerator_Php_Docblock_Tag(
-									array(	'name' 			=> 'var',
-											'description' 	=> 'string name of db table' )
-								)
-							)
-						)
-			)
-		);
 		
-		if(count($this->primary)) {
-			$db_class->setProperty(
-				array(	'name' 			=> '_primary',
-						'visibility' 	=> 'protected',
-						'defaultValue' 	=> count($this->primary) > 1 ? $this->primary : $this->primary[0],
-						'docblock' 		=> array(
-							'tags' => array(
-								new Zend_CodeGenerator_Php_Docblock_Tag(
-									array(
-										'name' 			=> 'var',
-										'description' 	=> 'string or array of fields in table'
-									)
-								)
-							)
-						)
-				)
-			);
-		}	
+		// add parameters
+		$db_class->addProperty("tableGateway", null, Zend\Code\Generator\PropertyGenerator::FLAG_PROTECTED);
+		
+		// add methods
+		$db_class->addMethod(	"__construct", 
+		        				array(	new Zend\Code\Generator\ParameterGenerator(	"tableGateway", 
+		        			        												"TableGateway")),
+		        				null, 
+		        				'$this->tableGateway = $tableGateway;');
+		
+		$db_class->addMethod(	"fetchAll",
+		        				array(),
+		        				null,
+		        				'$resultSet = $this->tableGateway->select();'."\n".
+								'return $resultSet;');
+		
+		$db_class->addMethod(	"get".$this->tableName,
+		        				array("id"),
+		        				null,
+		       					'$id  = (int) $id;'."\n".
+		        				'$rowset = $this->tableGateway->select(array(\'id\' => $id));'."\n".
+		        				'$row = $rowset->current();'."\n".
+		        				'if (!$row) {'."\n".
+		        				"\t".'throw new \Exception("Could not find row $id");'."\n".
+		       					'}'."\n".
+		       					'return $row;'	        
+		        				);
+		
+		$saveBody .= "";
+		foreach ($this->columns as $key => $defaultValue) {
+		    $saveBody .= "\t'".$key."'      \t=> $".$this->tableName."->$key,\n";
+		}
+		$db_class->addMethod(	"save".ucfirst($this->tableName),
+		       					array(	new Zend\Code\Generator\ParameterGenerator(	$this->tableName, 
+		        			        												ucfirst($this->tableName))),
+		        				null,
+		        				
+		        				'$data = array('."\n".
+		        				$saveBody.
+		        				');'."\n".
+		        				
+		        				'$id = (int) $'.$this->tableName.'->id;'."\n".
+		        				'if ($id == 0) {'."\n".
+		        				'	$this->tableGateway->insert($data);'."\n".
+		        				'} else {'."\n".
+		        				'	if ($this->get'.$this->tableName.'($id)) {'."\n".
+		        				'		$this->tableGateway->update($data, array(\'id\' => $id));'."\n".
+		        				'	} else {'."\n".
+		        				'		throw new \Exception(\'id does not exist\');'."\n".
+		        				'	}'."\n".
+		        				'}');
+		
+		$db_class->addMethod(	"delete".ucfirst($this->tableName),
+		        				array("id"),
+		        				null,
+		        				'$this->tableGateway->delete(array(\'id\' => $id));');
+		
+// 		class AlbumTable
+// 		{
+// 			protected $tableGateway;
+		
+// 			public function __construct(TableGateway $tableGateway)
+// 			{
+// 				$this->tableGateway = $tableGateway;
+// 			}
+		
+// 			public function fetchAll()
+// 			{
+// 				$resultSet = $this->tableGateway->select();
+// 				return $resultSet;
+// 			}
+		
+// 			public function getAlbum($id)
+// 			{
+// 				$id  = (int) $id;
+// 				$rowset = $this->tableGateway->select(array('id' => $id));
+// 				$row = $rowset->current();
+// 				if (!$row) {
+// 					throw new \Exception("Could not find row $id");
+// 				}
+// 				return $row;
+// 			}
+		
+
+		
+// 			public function deleteAlbum($id)
+// 			{
+// 				$this->tableGateway->delete(array('id' => $id));
+// 			}
+// 		}
+		
+// 		$db_class->setProperty(
+// 			array(	'name' 			=> '_name',
+// 					'visibility' 	=> 'protected',
+// 					'defaultValue' 	=> $this->tableName,
+// 					'docblock' 		=> 
+// 						array(	'tags' 	=> 
+// 							array(	
+// 								new Zend\Code\Generator\DocBlock\Tag(
+// 									array(	'name' 			=> 'var',
+// 											'description' 	=> 'string name of db table' )
+// 								)
+// 							)
+// 						)
+// 			)
+// 		);
+		
+// 		if(count($this->primary)) {
+// 			$db_class->setProperty(
+// 				array(	'name' 			=> '_primary',
+// 						'visibility' 	=> 'protected',
+// 						'defaultValue' 	=> count($this->primary) > 1 ? $this->primary : $this->primary[0],
+// 						'docblock' 		=> array(
+// 							'tags' => array(
+// 								new Zend\Code\Generator\DocBlock\Tag(
+// 									array(
+// 										'name' 			=> 'var',
+// 										'description' 	=> 'string or array of fields in table'
+// 									)
+// 								)
+// 							)
+// 						)
+// 				)
+// 			);
+// 		}	
 		return $db_class->generate();
 	}
 	
@@ -324,7 +506,7 @@ class ModelGenerator {
 			throw new Exception("ModelGenerator: mapper not set. Aborting.");
 		
 		// create zend_db_table_abstract
-		$class = new Zend_CodeGenerator_Php_Class();
+		$class = new Zend\Code\Generator\ClassGenerator();
 		$class->setName($this->package ."_". $this->mapper ."_". $this->className);
 		$class->setExtendedClass('Persist_Mapper');
 		

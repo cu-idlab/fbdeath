@@ -4,3 +4,5 @@
 ### APACHE FILES ###
 *.htaccess
 fbdeath/logs/access.log
+
+*.bak

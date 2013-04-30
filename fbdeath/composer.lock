@@ -1,5 +1,5 @@
 {
-    "hash": "62e8216c8d2b14fafd2263c29c05cad8",
+    "hash": "4a932e5f29916f43d75a729fa264806a",
     "packages": [
         {
             "name": "facebook/php-sdk",
@@ -94,17 +94,64 @@
             "time": "2013-02-21 06:45:16"
         },
         {
-            "name": "zendframework/zendframework",
+            "name": "socalnick/scn-social-auth",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zf2.git",
-                "reference": "087f459f97ae5ee6acd81fa4371b05523ee99ff0"
+                "url": "https://github.com/SocalNick/ScnSocialAuth.git",
+                "reference": "1.9.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zf2/zipball/087f459f97ae5ee6acd81fa4371b05523ee99ff0",
-                "reference": "087f459f97ae5ee6acd81fa4371b05523ee99ff0",
+                "url": "https://api.github.com/repos/SocalNick/ScnSocialAuth/zipball/1.9.2",
+                "reference": "1.9.2",
+                "shasum": ""
+            },
+            "require": {
+                "hybridauth/hybridauth": "dev-master",
+                "php": ">=5.3.3",
+                "zendframework/zendframework": "2.*",
+                "zf-commons/zfc-base": "0.*",
+                "zf-commons/zfc-user": "0.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "ScnSocialAuth": "src/",
+                    "ScnSocialAuthTest": "test/"
+                },
+                "classmap": [
+                    "./"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Nicholas Calugar",
+                    "email": "njcalugar@gmail.com",
+                    "homepage": "http://socalnick.github.com/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Uses the HybridAuth PHP library to Enable authentication via Google, Facebook, Twitter, Yahoo!, etc for the ZfcUser ZF2 module.",
+            "homepage": "https://github.com/SocalNick/ScnSocialAuth",
+            "keywords": [
+                "zf2"
+            ],
+            "time": "2013-03-13 17:38:41"
+        },
+        {
+            "name": "zendframework/zendframework",
+            "version": "2.1.1",
+            "source": {
+                "type": "git",
+                "url": "git://github.com/zendframework/zf2.git",
+                "reference": "release-2.1.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zendframework/zf2/zipball/release-2.1.1",
+                "reference": "release-2.1.1",
                 "shasum": ""
             },
             "require": {
@@ -187,7 +234,11 @@
                 "psr-0": {
                     "Zend\\": "library/",
                     "ZendTest\\": "tests/"
-                }
+                },
+                "files": [
+                    "library/Zend/Stdlib/compatibility/autoload.php",
+                    "library/Zend/Session/compatibility/autoload.php"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -199,7 +250,7 @@
                 "framework",
                 "zf2"
             ],
-            "time": "2013-03-12 20:11:06"
+            "time": "2013-02-06 21:23:43"
         },
         {
             "name": "zendframework/zftool",
@@ -306,21 +357,27 @@
         },
         {
             "name": "zf-commons/zfc-base",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
-                "url": "git://github.com/ZF-Commons/ZfcBase.git",
-                "reference": "0.1.0"
+                "url": "https://github.com/ZF-Commons/ZfcBase.git",
+                "reference": "0.1.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ZF-Commons/ZfcBase/zipball/0.1.0",
-                "reference": "0.1.0",
+                "url": "https://api.github.com/repos/ZF-Commons/ZfcBase/zipball/0.1.1",
+                "reference": "0.1.1",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3",
-                "zendframework/zendframework": "2.*"
+                "zendframework/zend-db": "2.1.*",
+                "zendframework/zend-eventmanager": "2.1.*",
+                "zendframework/zend-loader": "2.1.*",
+                "zendframework/zend-modulemanager": "2.1.*",
+                "zendframework/zend-mvc": "2.1.*",
+                "zendframework/zend-servicemanager": "2.1.*",
+                "zendframework/zend-stdlib": "2.1.*"
             },
             "type": "library",
             "autoload": {
@@ -349,26 +406,39 @@
             "keywords": [
                 "zf2"
             ],
-            "time": "2012-10-24 17:42:28"
+            "time": "2013-03-15 19:29:07"
         },
         {
             "name": "zf-commons/zfc-user",
-            "version": "dev-master",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ZF-Commons/ZfcUser.git",
-                "reference": "b9f34aa9284afec6ce96b8efee9dc9087716a387"
+                "reference": "0.1.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ZF-Commons/ZfcUser/zipball/b9f34aa9284afec6ce96b8efee9dc9087716a387",
-                "reference": "b9f34aa9284afec6ce96b8efee9dc9087716a387",
+                "url": "https://api.github.com/repos/ZF-Commons/ZfcUser/zipball/0.1.1",
+                "reference": "0.1.1",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3",
-                "zendframework/zendframework": "2.1.*",
+                "zendframework/zend-authentication": "2.1.*",
+                "zendframework/zend-crypt": "2.1.*",
+                "zendframework/zend-form": "2.1.*",
+                "zendframework/zend-inputfilter": "2.1.*",
+                "zendframework/zend-loader": "2.1.*",
+                "zendframework/zend-modulemanager": "2.1.*",
+                "zendframework/zend-mvc": "2.1.*",
+                "zendframework/zend-servicemanager": "2.1.*",
+                "zendframework/zend-stdlib": "2.1.*",
+                "zendframework/zend-validator": "2.1.*",
+                "zendframework/zend-view": "2.1.*",
                 "zf-commons/zfc-base": "0.*"
+            },
+            "suggest": {
+                "zendframework/zend-session": "To use the default authentication adapter."
             },
             "type": "library",
             "autoload": {
@@ -397,7 +467,7 @@
             "keywords": [
                 "zf2"
             ],
-            "time": "2013-03-06 15:48:46"
+            "time": "2013-03-15 19:29:00"
         }
     ],
     "packages-dev": null,
@@ -406,10 +476,10 @@
     ],
     "minimum-stability": "dev",
     "stability-flags": {
-        "zf-commons/zfc-user": 20,
         "zendframework/zftool": 20,
         "zf-commons/zfc-admin": 20,
         "hybridauth/hybridauth": 20,
-        "facebook/php-sdk": 20
+        "facebook/php-sdk": 20,
+        "socalnick/scn-social-auth": 20
     }
 }

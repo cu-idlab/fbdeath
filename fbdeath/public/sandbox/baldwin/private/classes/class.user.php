@@ -1,43 +1,53 @@
 <?php
 /*
+	Epilogue Group
 
-	class.user.php
-	
-	author: Baldwin Chang (baldwin@baldwinc.com)
+	advisor: Jed B.
+
+	members: 
+		Anita Marie G.
+		Baldwin C.
+		Nafiri K.
+		Nithin J.
 
 */
 
-class user {
+class User {
 
 	private $_sql = '';
+	private $_facebook = '';
+	private $_id = '';
+	private $_token = '';
 
-	function __construct($sql, $id) {
-		$this->_sql_con = $sql;
+	public $info = '';
+
+	function __construct($sql, $facebook, $id) {
+		$this->_sql = $sql;
+		$this->_facebook = $facebook;
 		$this->_id = $id;
-	
+
+		$this->_token = $facebook->getAccessToken();
 		$this->info = $this->_info();
 	}
 
-
 	private function _info() {
-		return $this->_sql_con->query("SELECT * FROM `user_db` LEFT JOIN `user_settings` ON `user_db`.id = '". $this->_id ."' AND `user_db`.id=`user_settings`.id ");
+		return $this->_sql->query("SELECT * FROM `epi_users` LEFT JOIN `epi_fbtokens` ON `epi_users`.fb_id = '". $this->_id ."' AND `epi_users`.fb_id=`epi_fbtokens`.fb_id WHERE `epi_users`.`fb_id` = '". $this->_id ."'");
 	}
 
-	public function full_name() {
-		return $this->info['first_name'] .' '. $this->info['last_name'];
+	public function graph_call($call) {
+		$url = 'https://graph.facebook.com/'. $this->_id .'?'. $call .'&amp;access_token='. $this->info['fb_token'];
+		$from_fb = @file_get_contents($url);
+		return json_decode($from_fb);
 	}
 
-	public function has_flag($flag) {
-		return in_array($flag, explode(",", $this->info['user_flags']));
+	public function name() {
+		$graph = $this->graph_call('');
+		return $graph->name;
 	}
 
 	function __destruct() {
 
-
 	}
-
-
 }
-
 
 ?>

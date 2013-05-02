@@ -35,14 +35,34 @@ class Epilogue {
 	<div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
-          <a class="brand" href="./">Epilogue</a>
+          <a class="brand" href="./">Epilogue</a>';
+          if ($this->is_loggedin()) {
+          	echo '
 
-       	<ul class="nav">
-			<li><a href="#">home</a></li>
-			<li><a href="#">about</a></li>
-			<li><a href="#">features</a></li>
-			<li><a href="#">contact</a></li>
-		</ul>
+          		<ul class=" nav pull-right">
+	          		<li>
+						 <a>About</a>
+					</li>
+					<li>
+						<a>Preferences</a>
+					</li>
+					<li>
+						<a href="http://epilogue.baldwinc.com/logout.php">Logout</a>
+					</li>
+				</div>
+          	';
+
+          }else{
+	       	echo '<ul class="nav">
+				<li><a href="#">home</a></li>
+				<li><a href="#">about</a></li>
+				<li><a href="#">features</a></li>
+				<li><a href="#">contact</a></li>
+			</ul>';
+
+		}	
+
+		echo '
         </div>
       </div>
 	</div>

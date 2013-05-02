@@ -12,7 +12,9 @@
 
 */
 
-require_once "/home/epilogue/public_html/private/mod_include.php";
+if ($_SERVER["HTTP_HOST"] == "localhost") header('Location: http://epilogue.baldwinc.com/');
+
+require_once "private/mod_include.php";
 
 $sql_user = 'epilogue_main';
 $sql_db = 'epilogue_fbdeath';
@@ -24,7 +26,7 @@ $config['appId'] = '121943451320482';
 $config['secret'] = 'df83040bf2c54c834c8d3b2a8d115a94';
 $config['fileUpload'] = false; // optional
 
-$facebook = new Epilogue_Facebook($config);
+$facebook = new Facebook($config);
 
 
 

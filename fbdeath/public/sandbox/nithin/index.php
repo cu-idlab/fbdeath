@@ -12,7 +12,12 @@
 
 */
 
-	require_once "/home/epilogue/public_html/private/includes/header.php";
+	require_once "private/includes/header.php";
+
+	if ($epilogue->is_loggedin()) {
+		require_once "dashboard.php";
+		die();
+	}
 
 ?>
     <div id="epilogue_welcome" class="row-fluid">
@@ -69,5 +74,5 @@
 			});
     </script>
 <?php
-	require_once "/home/epilogue/public_html/private/includes/footer.php";
+	require_once "private/includes/footer.php";
 ?>

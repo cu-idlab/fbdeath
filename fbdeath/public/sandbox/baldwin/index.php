@@ -12,7 +12,7 @@
 
 */
 
-	require_once "/home/epilogue/public_html/private/includes/header.php";
+	require_once "private/includes/header.php";
 
 ?>
     <div id="epilogue_welcome" class="row-fluid">
@@ -69,5 +69,5 @@
 			});
     </script>
 <?php
-	require_once "/home/epilogue/public_html/private/includes/footer.php";
+	require_once "private/includes/footer.php";
 ?>

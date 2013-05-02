@@ -12,7 +12,7 @@
 
 */
 
-require_once "/home/epilogue/public_html/private/mod_include.php";
+require_once "private/mod_include.php";
 
 $sql_user = 'epilogue_main';
 $sql_db = 'epilogue_fbdeath';

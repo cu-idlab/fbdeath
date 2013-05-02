@@ -12,7 +12,7 @@
 
 */
 
-	require_once "/home/epilogue/public_html/config.php";
+	require_once "config.php";
 
 	if (!isset($cfg['pageTitle'])) $cfg['pageTitle'] = 'Unknown'
 ?>

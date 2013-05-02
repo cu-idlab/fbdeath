@@ -12,6 +12,8 @@
 
 */
 
+if ($_SERVER["HTTP_HOST"] == "localhost") header('Location: http://epilogue.baldwinc.com/');
+
 require_once "private/mod_include.php";
 
 $sql_user = 'epilogue_main';

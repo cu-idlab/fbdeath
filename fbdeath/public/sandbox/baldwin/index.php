@@ -14,6 +14,11 @@
 
 	require_once "private/includes/header.php";
 
+	if ($epilogue->is_loggedin()) {
+		require_once "dashboard.php";
+		die();
+	}
+
 ?>
     <div id="epilogue_welcome" class="row-fluid">
         <div class="container span8 offset2">

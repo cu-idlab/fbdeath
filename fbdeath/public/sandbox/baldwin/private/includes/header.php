@@ -38,3 +38,4 @@
 		$epilogue->nav_bar();
 	}
 ?>
+<div class="container">

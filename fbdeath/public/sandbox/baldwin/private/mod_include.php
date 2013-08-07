@@ -15,6 +15,8 @@
 require_once "classes/class.epilogue.php";
 require_once "classes/class.sql.php";
 require_once "classes/class.user.php";
+require_once "classes/class.lists.php";
+
 
 require_once "classes/fb/facebook.php";
 

@@ -1,4 +1,10 @@
+<?php
+	require_once "private/includes/header.php";
 
+	if (!$epilogue->is_loggedin())
+		die('You are not logged in.');
+
+?>
 <div class="text-center" style="margin-top: 100px">
 	<h1>Welcome to Epilogue</h1>
 	<h4>Your digital legacy</h4>

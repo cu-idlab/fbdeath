@@ -8,3 +8,9 @@
 	-o-background-size: cover;
 	background-size: cover;
 }
+
+.typeahead_wrapper { display: block; height: 30px; }
+.typeahead_photo { float: left; max-width: 30px; max-height: 30px; margin-right: 5px; overflow:hidden; }
+.typeahead_labels { float: left; height: 30px; }
+.typeahead_primary { font-weight: bold; }
+.typeahead_secondary { font-size: .8em; margin-top: -5px; }

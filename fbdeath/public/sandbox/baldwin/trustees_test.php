@@ -14,65 +14,21 @@
 
 	require_once "private/includes/header.php";
 
-	if (!$epilogue->is_loggedin())
+	if (!$epilogue->is_loggedin()) {
 		die('You are not logged in.');
-
-
-	if (isset($_POST['message']) && is_numeric($_POST['message_id'])) {
-		$epilogue->save_message($user, $_POST['message_id'], $_POST['message']);
-		$conf = g_msg('Message saved!');
 	}
-?>
-
-<div class="container" style="margin-top: 100px">
-	<?=$conf?>
-
-	<div id="DUHCOMPOSINSPOT" class="well" style="display: none;">
-			<div><form method="post"><button class="pull-right btn btn-primary" type="submit">Save</button>
-									
-									<input id="trustee" class="span2 typeahead" data-provide="typeahead" autocomplete="off" type="text" placeholder="Recipient" required>
-									<input type="hidden" id="trusteeId" name="message_id" />
-								
-								<span class="type_loading" style="display: none">
-									<i class="icon-spinner icon-spin"></i>
-								</span></div>
-			<textarea style="width:100%; height:170px;" name="message" placeholder="Type your message here..." required></textarea></form>
-
-	</div>
-	<div class="well">
-		<h1><button class="pull-right btn btn-success" onclick="DISPERSONCOMPOSIN()"><i class="icon-pencil"></i> Compose</button><i class="icon-envelope"></i> Messages</h1>
-
-<?php
-#
-# Hi jed, if you're reading this. dis person aint composing so....
-#		i just do the add of duh first fifdee charamacterz.
-#
-#	thx.
-#
-
-$query = $sql->raw_query("SELECT * FROM `epi_messages` WHERE `user_id` = '". $epilogue->id ."'");
-while ($msg = mysql_fetch_array($query)) {
-	$recip = $user->graph_call_on_user($msg['recepient_id'], 'fields=name');
-	echo 'To: '. $recip->name;
-	echo '<blockquote>'. substr($msg['message_content'], 0, 50) .'...</blockquote>';
-}
-
-
 
 ?>
+<br /><br />
 
+<form method="post">
+<input type="text" class="typeahead" style="margin: 0 auto;" autocomplete="off" data-provide="typeahead" placeholder="Select a Trustee..."/>
+<input type="text" id="trusteeId" name="trusteeId" />
+<input type="submit" />
+</form>
 
-
-
-	</div>
-
-</div>
-
-
-<script type="text/javascript">
-function DISPERSONCOMPOSIN() {
-	$('#DUHCOMPOSINSPOT').fadeIn(400);
-}
+<h1><?=$_POST['trusteeId']?></h1>
+	<script type="text/javascript">
 		$(function(){
 
 			var trusteeObjs = {};
@@ -87,8 +43,6 @@ function DISPERSONCOMPOSIN() {
 					,url: 'trustees.json'
 					,cache: false
 					,success: function(data){
-
-
 						//reset these containers every time the user searches
 						//because we're potentially getting entirely different results from the api
 						trusteeObjs = {};
@@ -119,15 +73,13 @@ function DISPERSONCOMPOSIN() {
 			$(".typeahead").typeahead({
 				source: function ( query, process ) {
 
-					$(".type_loading").show();
 					//here we pass the query (search) and process callback arguments to the throttled function
 					throttledRequest( query, process );
-
 
 				}
         ,highlighter: function( item ){
           var trustee = trusteeObjs[ item ];
- 					$(".type_loading").hide();         
+          
           return '<div class="trustee" style="display: table-cell;">'
                 +'<div style="height: 30px; width: 30px; background: url(\'' + trustee.photo + '\') top center; float: left; vertical-align: top;"></div>'
                 +'<div style="vertical-align: top; display: table-cell; padding-left: 10px;"><strong>' + trustee.name + '</strong></div>'
@@ -146,8 +98,9 @@ function DISPERSONCOMPOSIN() {
 					return selectedName;
 				}
 			});
-});
-</script>
+		});
+	</script>
+
 
 <?php
 	require_once "private/includes/footer.php";

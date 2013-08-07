@@ -31,6 +31,9 @@
 
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
 		<script src="http://epilogue.baldwinc.com/public/assets/js/bootstrap.js"></script>
+
+
+		<script src="http://underscorejs.org/underscore-min.js"></script>
 	</head>
 	<body>
 <?php
@@ -38,4 +41,3 @@
 		$epilogue->nav_bar();
 	}
 ?>
-<div class="container">

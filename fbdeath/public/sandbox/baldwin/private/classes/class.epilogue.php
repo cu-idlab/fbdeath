@@ -47,6 +47,9 @@ class Epilogue {
 						<a>Preferences</a>
 					</li>
 					<li>
+						<a href="dashboard.php">Dashboard</a>
+					</li>
+					<li>
 						<a href="http://epilogue.baldwinc.com/logout.php">Logout</a>
 					</li>
 				</div>
@@ -173,7 +176,33 @@ class Epilogue {
 		return;
 	} 
 
+	/* Trustees */
 
+	public function save_trustee($user, $id_1, $id_2) {
+		# Assume User is Logged in, $user -> User Object
+		$this->_sql->raw_query('INSERT INTO `epi_trustees` VALUES (NULL, '. $user->_id .',  '. $id_1 .',  '. $id_2 .')  ON DUPLICATE KEY UPDATE `primary` = '. $id_1 .', `secondary` = '. $id_2 .';');
+	}
+
+	public function has_trustees($user) {
+		# Assume User is Logged in, $user -> User Object
+		$q = $this->_sql->query('SELECT COUNT( * ) AS TOTALFOUND FROM `epi_trustees` WHERE `user_id` = "'. $user->_id .'"');
+		return ($q['TOTALFOUND'] > 0);
+	}
+
+	public function trustee_info($user, $which = 'primary') {
+		# Assume User is Logged in, $user -> User Object
+		$q = $this->_sql->query('SELECT * FROM `epi_trustees` WHERE `user_id` = "'. $user->_id .'"');
+		$call = $user->graph_call_on_user($q[$which], 'fields=name');
+		return array('id' => $q[$which], 'name' => $call->name);
+	}
+
+
+	/* Messages */
+
+	public function save_message($user, $recepient, $message) {
+		# Assume User is Logged in, $user -> User Object
+		$this->_sql->raw_query('INSERT INTO `epi_messages` VALUES (NULL, '. $user->_id .',  '. $recepient .',  "'. htmlentities($message) .'") ');
+	}
 
 
 	function __destruct() {

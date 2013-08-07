@@ -10,3 +10,6 @@ fbdeath/logs/access.log
 
 ### PASSWORDS ###
 fbdeath/fbdeath/public/sandbox/baldwin/config.php
+
+### SQL ###
+*.sql

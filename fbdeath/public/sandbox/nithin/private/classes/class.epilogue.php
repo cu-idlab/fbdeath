@@ -47,6 +47,9 @@ class Epilogue {
 						<a>Preferences</a>
 					</li>
 					<li>
+						<a href="dashboard.php">Dashboard</a>
+					</li>
+					<li>
 						<a href="http://epilogue.baldwinc.com/logout.php">Logout</a>
 					</li>
 				</div>
